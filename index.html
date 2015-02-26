@@ -20,10 +20,7 @@
     <!-- Loading knockoutjs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
 
-    <!-- Loading Google Maps -->
-    <!-- <style type="text/css">
-        html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
-    </style> -->
+    <!-- Loading Google Map -->
     <script type="text/javascript"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDREVIZuNleXILHf47t3Iw2fwiKUVDEvdo">
     </script>
@@ -34,13 +31,18 @@
         <div class="row">
             <div class="col-md-12 form-group header">
                 <label for="searchMarkers">Search a place: </label>
-                <input type="text" class="form-control" id="searchMarkers" data-bin="value: label, valueUpdate: 'keyup'">
+                <!-- Search Box with jquery ui autocomplete & knockoutjs filter implementation
+                     Thanks @ Tyrsius on stackoverflow for his answer on the post : http://stackoverflow.com/questions/12014128/using-knockout-to-filter-viewmodel-data-using-multiple-fields-columns-and-contro
+                     His jsfiddle which bring solution : http://jsfiddle.net/tyrsius/67kgm/
+                     Simplified version for my usage : http://jsfiddle.net/7d8nexk5/
+                      -->
+                <input type="text" class="form-control" id="searchMarkers" data-bind="value: nameSearch, valueUpdate: 'keypress'">
             </div>
             <div class="col-md-12 marker-list">
                 <!-- VIEW / Using knockout to display markers list -->
                 <h4>Markers List</h4>
-                <ul data-bind="foreach: markers">
-                    <li data-bind="text: label, click: $parent.centerMap"></li>
+                <ul data-bind="foreach: filteredRecords">
+                    <li data-bind="text: name, click: $parent.centerMap"></li>
                 </ul>
             </div>
         </div>

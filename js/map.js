@@ -1,4 +1,15 @@
 /*
+ *  Knockout utility stringStartWith
+ *  Not implemented in knockout min version
+ */
+
+ko.utils.stringStartsWith = function(string, startsWith) {
+    string = string || "";
+    if (startsWith.length > string.length) return false;
+    return string.substring(0, startsWith.length) === startsWith;
+};
+
+/*
  *  Map generator
  *  Takes current loc (or watch position) to center map
  */
@@ -10,6 +21,7 @@ var geocoder;
 
 function initializeMap() {
     var map;
+    var markers = [];
     var bounds = new google.maps.LatLngBounds();
 
     geocoder = new google.maps.Geocoder();
@@ -51,11 +63,20 @@ function initializeMap() {
     function viewModel() {
         var self = this;
 
-        self.markers = addressesObservableArray();
+        self.records = addressesObservableArray;
+
+        self.nameSearch = ko.observable('');
+
+        self.filteredRecords = ko.computed(function() {
+            return ko.utils.arrayFilter(self.records(), function(rec) {
+                return (self.nameSearch().length == 0 || ko.utils.stringStartsWith(rec.name.toLowerCase(), self.nameSearch().toLowerCase()))
+            });
+        });
+
         self.centerMap = function() {
             map.setCenter(new google.maps.LatLng(this.lat, this.lng));
         }
-    }
+    };
 
     //  JQuery UI autocomplete
     $(function() {
@@ -80,10 +101,13 @@ function initializeMap() {
         marker = new google.maps.Marker({
             position: position,
             map: map,
-            title: addressesObservableArray()[i].name
+            title: addressesObservableArray()[i].name,
+            visible: true
         });
 
-         google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        markers.push(marker);
+
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
                 infoWindow.setContent(addressesObservableArray()[i].desc);
                 infoWindow.open(map, marker);
