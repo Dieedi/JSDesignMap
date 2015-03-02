@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<article></article>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 form-group header">
@@ -36,23 +37,24 @@
                      His jsfiddle which bring solution : http://jsfiddle.net/tyrsius/67kgm/
                      Simplified version for my usage : http://jsfiddle.net/7d8nexk5/
                       -->
-                <input type="text" class="form-control" id="searchMarkers" data-bind="value: nameSearch, valueUpdate: 'keypress'">
+                <input type="text" class="form-control" id="searchMarkers" data-bind="value: nameSearch, valueUpdate: 'keyup'">
             </div>
             <div class="col-md-12 marker-list">
                 <!-- VIEW / Using knockout to display markers list -->
                 <h4>Markers List</h4>
                 <ul data-bind="foreach: filteredRecords">
-                    <li data-bind="text: name, click: $parent.centerMap"></li>
+                    <li data-bind="text: name, click: $parent.centerMap, value: $index, uniqueName: true"></li>
                 </ul>
             </div>
         </div>
         <div class="row map-container">
             <!-- Display map -->
-            <div id="map-canvas"></div>
+            <div id="map-canvas" data-bind="map: map"></div>
         </div>
-        <article></article>
+       <!--  <article></article> -->
     </div>
     <!-- map/view script -->
+    <script src="js/geoLoc.js"></script>
     <script src="js/map.js"></script>
 </body>
 </html>

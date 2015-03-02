@@ -1,3 +1,4 @@
+
 /*
  *  Knockout utility stringStartWith
  *  Not implemented in knockout min version
@@ -21,13 +22,13 @@ var geocoder;
 
 function initializeMap() {
     var map;
-    var markers = [];
+
     var bounds = new google.maps.LatLngBounds();
 
     geocoder = new google.maps.Geocoder();
 
     var mapOptions = {
-        center: new google.maps.LatLng(lat, lng),
+        // center: new google.maps.LatLng(lat, lng),
         zoom: 14
     };
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -48,7 +49,7 @@ function initializeMap() {
             lng: 5.008602,
             name: "Home",
             desc: "<h3>My house</h3><p>This is where I live since 3 years now</p>",
-            label: "Home"
+            label: "Home",
         },
         {
             lat: 43.579640,
@@ -56,20 +57,66 @@ function initializeMap() {
             name: "Vap Shop",
             desc: "<h3>My favorite Vap Shop</h3><p>Most pleasant Vap Shop in town.</p>",
             label: "Vap Shop"
+        },
+        {
+            lat: 43.589947,
+            lng: 5.010917,
+            name: "Plan d'eau Saint Suspi",
+            desc: "<h3>Water Point</h3><p>Only the ducks can swim here !</p>",
+            label: "Plan d'eau Saint Suspi"
         }
     ]);
+
+    //  create objects with google map markers
+    function createMarker(adresses) {
+        var self = this;
+        this.name = adresses.name;
+        this.lat = adresses.lat;
+        this.lng = adresses.lng;
+        this.desc = adresses.desc;
+        this.label = adresses.label;
+
+        this.marker = new google.maps.Marker({
+            position: new google.maps.LatLng(self.lat, self.lng),
+            title: self.name,
+            map: map,
+            name: self.name,
+            visible: true
+        });
+
+        bounds.extend(this.marker.position);
+
+        google.maps.event.addListener(self.marker, 'click', function() {
+            infoWindow.setContent(self.desc);
+            infoWindow.open(map, self.marker);
+        });
+    }
 
     //  View Model
     function viewModel() {
         var self = this;
 
-        self.records = addressesObservableArray;
-
         self.nameSearch = ko.observable('');
 
+        //  Add markers in array
+        self.markers = [];
+
+        //  push new marker in markers array
+        for (var i = 0; i < addressesObservableArray().length; i++) {
+            self.markers.push(new createMarker(addressesObservableArray()[i]));
+        }
+
+        //  Search through observableArray to update list
         self.filteredRecords = ko.computed(function() {
-            return ko.utils.arrayFilter(self.records(), function(rec) {
-                return (self.nameSearch().length == 0 || ko.utils.stringStartsWith(rec.name.toLowerCase(), self.nameSearch().toLowerCase()))
+            return ko.utils.arrayFilter(self.markers, function(rec) {
+                if (!(self.nameSearch().length == 0 || ko.utils.stringStartsWith(rec.name.toLowerCase(), self.nameSearch().toLowerCase()))) {
+                    //  Set visibility of markers out of search to false
+                    rec.marker.setVisible(false);
+                }
+                if (self.nameSearch().length == 0 || ko.utils.stringStartsWith(rec.name.toLowerCase(), self.nameSearch().toLowerCase())) {
+                    rec.marker.setVisible(true);
+                    return (self.nameSearch().length == 0 || ko.utils.stringStartsWith(rec.name.toLowerCase(), self.nameSearch().toLowerCase()));
+                }
             });
         });
 
@@ -92,90 +139,21 @@ function initializeMap() {
     //  Apply bindings to array of markers
     ko.applyBindings(new viewModel());
 
-    var infoWindow = new google.maps.InfoWindow(),
-        marker;
-
-    for (var i = 0; i < addressesObservableArray().length; i++) {
-        var position = new google.maps.LatLng(addressesObservableArray()[i].lat,addressesObservableArray()[i].lng);
-        bounds.extend(mapOptions.center);
-        marker = new google.maps.Marker({
-            position: position,
-            map: map,
-            title: addressesObservableArray()[i].name,
-            visible: true
-        });
-
-        markers.push(marker);
-
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-                infoWindow.setContent(addressesObservableArray()[i].desc);
-                infoWindow.open(map, marker);
-            }
-        })(marker, i));
-        // override center by fitting all marker in the screen
-        map.fitBounds(bounds);
-    }
+    var infoWindow = new google.maps.InfoWindow();
 
     // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
     var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
         this.setZoom(14);
         google.maps.event.removeListener(boundsListener);
     });
+
+    //  Center to all markers
+    map.fitBounds(bounds);
 }
-
 /*
- *  ==== GET LOCATION ====
- *  Source : Tout sur HTML5 et CSS3, Jean-Marie COCHETEAU & Laurent KHOURI, Ed. DUNOD
- */
-
 // Wait for page load
 $(document).ready(init);
-var lat, lng;
-// initialization
 function init(e) {
-    // testing compatibility
-    if (navigator.geolocation) {
-        /* get current position and display it or display error message. Use options
-         * can use watchPosition instead of getCurrentPosition
-         * var idGeoloc = navigato.geolocation.watchPosition(true, false, options);
-         * New properties :
-         *  - altitude
-         *  - altitudeAccuracy
-         *  - heading (angle to north pole)
-         *  - speed
-         * Display null if there is a problem with GPS
-         * Stop watch with navigator.geolocation.clearWatch(idGeoloc);
-         */
-        navigator.geolocation.getCurrentPosition(geolocSuccess, geolocFail, geolocOptions);
-        $('article').html('Wait for positioning...');
-    } else {
-        $('article').html("Your browser doesn't allow Geolocation");
-    }
+    var lat = 43.5867, lng = 5.0046;
 }
-
-// If get successed display coords and accuracy
-function geolocSuccess(position) {
-    lat = position.coords.latitude;
-    lng = position.coords.longitude;
-    accuracy = position.coords.accuracy
-    $('article').html("Found your position !" + lat + ' ' + lng + ' accuracy ' + accuracy + ' meters');
-    initializeMap();
-}
-
-// If get failed display error message
-function geolocFail(e) {
-    var errorMsg = {
-        "1" : "Allow geolocation refused",
-        "2" : "position not found",
-        "3" : "Allow of geolocation expired"
-    };
-    $('article').html(erroMsg[e]);
-}
-
-// Options for geolocation
-var geolocOptions = {
-    enableHighAccuracy : true,
-    timeout : 30000,
-    maximumAge : 60000
-};
+*/
