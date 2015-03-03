@@ -10,6 +10,12 @@ ko.utils.stringStartsWith = function(string, startsWith) {
     return string.substring(0, startsWith.length) === startsWith;
 };
 
+
+// Wait for page load
+$(document).ready(initializeMap);
+var lat, lng;
+
+
 /*
  *  Map generator
  *  Takes current loc (or watch position) to center map
@@ -45,31 +51,46 @@ function initializeMap() {
     //  Knockout observable array
     var addressesObservableArray = ko.observableArray([
         {
-            lat: 43.584258,
-            lng: 5.008602,
-            name: "Home",
-            desc: "<h3>My house</h3><p>This is where I live since 3 years now</p>",
-            label: "Home",
+            lat: 43.599548,
+            lng: 5.019535,
+            name: "Miramas Golf",
+            desc: "18 holes golf under the sun !",
+            label: "Golf",
         },
         {
-            lat: 43.579640,
-            lng: 5.000336,
-            name: "Vap Shop",
-            desc: "<h3>My favorite Vap Shop</h3><p>Most pleasant Vap Shop in town.</p>",
-            label: "Vap Shop"
+            lat: 43.580706,
+            lng: 4.999503,
+            name: "Miramas gare sncf",
+            desc: "Some old train to see here",
+            label: "Gare"
         },
         {
             lat: 43.589947,
             lng: 5.010917,
-            name: "Plan d'eau Saint Suspi",
-            desc: "<h3>Water Point</h3><p>Only the ducks can swim here !</p>",
-            label: "Plan d'eau Saint Suspi"
+            name: "Lac Saint Suspi",
+            desc: "Only the ducks can swim here !",
+            label: "Lac Saint Suspi"
+        },
+        {
+            lat: 43.572448,
+            lng: 4.966266,
+            name: "Miramas autodrome",
+            desc: "BMW 'secret' autodrome, who knows what happend there ?",
+            label: "Autodrome"
+        },
+        {
+            lat: 43.559568,
+            lng: 5.029159,
+            name: "Miramas poudrerie",
+            desc: "An old gun-powder factory which is now a natural Park",
+            label: "poudrerie"
         }
     ]);
 
     //  create objects with google map markers
     function createMarker(adresses) {
         var self = this;
+
         this.name = adresses.name;
         this.lat = adresses.lat;
         this.lng = adresses.lng;
@@ -84,10 +105,19 @@ function initializeMap() {
             visible: true
         });
 
+        //  Add a position to map bounds
         bounds.extend(this.marker.position);
 
+        //  create infoWindow content
+        var content = '<div class="infoWindow"><h3>'
+        + adresses.name
+        + '</h3><p>'
+        + adresses.desc
+        + '</p></div>';
+
         google.maps.event.addListener(self.marker, 'click', function() {
-            infoWindow.setContent(self.desc);
+            //  Apply infoWindow content and call addImage of flickr.js function
+            infoWindow.setContent(content, addImage(adresses.name, adresses.desc));
             infoWindow.open(map, self.marker);
         });
     }
@@ -125,8 +155,8 @@ function initializeMap() {
         }
     };
 
-    //  JQuery UI autocomplete
-    $(function() {
+    //  JQuery UI autocomplete ... search finally done without it.
+    /*$(function() {
         $('#searchMarkers').autocomplete({
             delay: 0,
             source: addressesObservableArray(),
@@ -134,7 +164,7 @@ function initializeMap() {
                 map.setCenter(new google.maps.LatLng(ui.item.lat, ui.item.lng));
             }
         });
-    });
+    });*/
 
     //  Apply bindings to array of markers
     ko.applyBindings(new viewModel());
@@ -143,7 +173,7 @@ function initializeMap() {
 
     // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
     var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
-        this.setZoom(14);
+        // this.setZoom(14);
         google.maps.event.removeListener(boundsListener);
     });
 

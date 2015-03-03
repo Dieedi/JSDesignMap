@@ -27,10 +27,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<article></article>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 form-group header">
+        <div class="row header">
+            <div class="col-sm-12 form-group">
                 <label for="searchMarkers">Search a place: </label>
                 <!-- Search Box with jquery ui autocomplete & knockoutjs filter implementation
                      Thanks @ Tyrsius on stackoverflow for his answer on the post : http://stackoverflow.com/questions/12014128/using-knockout-to-filter-viewmodel-data-using-multiple-fields-columns-and-contro
@@ -39,22 +38,25 @@
                       -->
                 <input type="text" class="form-control" id="searchMarkers" data-bind="value: nameSearch, valueUpdate: 'keyup'">
             </div>
-            <div class="col-md-12 marker-list">
+        </div>
+        <div class="row content">
+            <div class="col-sm-3 marker-list">
                 <!-- VIEW / Using knockout to display markers list -->
                 <h4>Markers List</h4>
                 <ul data-bind="foreach: filteredRecords">
                     <li data-bind="text: name, click: $parent.centerMap, value: $index, uniqueName: true"></li>
                 </ul>
             </div>
-        </div>
-        <div class="row map-container">
-            <!-- Display map -->
-            <div id="map-canvas" data-bind="map: map"></div>
+            <div class="col-sm-9 map-container">
+                <!-- Display map -->
+                <div id="map-canvas" data-bind="map: map"></div>
+            </div>
         </div>
        <!--  <article></article> -->
     </div>
     <!-- map/view script -->
-    <script src="js/geoLoc.js"></script>
+    <script src="js/flickr.js"></script>
+    <!-- <script src="js/geoLoc.js"></script> -->
     <script src="js/map.js"></script>
 </body>
 </html>
