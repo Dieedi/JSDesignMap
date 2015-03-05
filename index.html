@@ -42,14 +42,14 @@
         <div class="row content">
             <div class="col-sm-3 marker-list">
                 <!-- VIEW / Using knockout to display markers list -->
-                <h4>Markers List</h4>
+                <h4>Places</h4>
                 <ul data-bind="foreach: filteredRecords">
                     <li data-bind="text: name, click: $parent.centerMap, value: $index, uniqueName: true"></li>
                 </ul>
             </div>
             <div class="col-sm-9 map-container">
                 <!-- Display map -->
-                <div id="map-canvas" data-bind="map: map"></div>
+                <div id="map-canvas" data-bind="html: map"></div>
             </div>
         </div>
        <!--  <article></article> -->

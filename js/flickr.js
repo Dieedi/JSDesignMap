@@ -17,6 +17,7 @@ function addImage(text, desc) {
             function(items) {
                 //  randomize the photo but some search didn't have more than 5 photos so random depend
                         //  of array length
+                        if (items.photos != undefined) {
                 var photoNum = Math.floor(Math.random() * items.photos.photo.length);
                 console.log(photoNum);
                 $('.infoWindow').append('<img src="http://farm'
@@ -29,5 +30,6 @@ function addImage(text, desc) {
                     + items.photos.photo[photoNum].secret
                     + '_s.jpg" alt="'
                     + items.photos.photo[photoNum].title + '">');
+            }
             });
 }
