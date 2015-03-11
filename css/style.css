@@ -1,0 +1,117 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    background-color: #CDCDCD;
+}
+
+.errorMsg {
+    color: red;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.container-fluid {
+    height: 100%;
+}
+
+.header {
+    background-color: #1f4f6f;
+    color: #F0F0F0;
+    height: 10%;
+}
+
+.content {
+    height: 90%;
+}
+
+.form-group {
+    margin-top: 1%;
+    margin-bottom: 0;
+}
+
+.form-control {
+    display: inline-block;
+    width: 55%;
+    max-width: 200px;
+    height: 90%;
+    margin-top: 1% !important;
+    margin-bottom: 1%;
+}
+
+@media (min-width: 1000px) {
+    .form-control {
+        margin-top: 0.5% !important;
+        margin-bottom: 0.5%;
+    }
+}
+
+.marker-list {
+    background-color: #CDCDCD;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-right: 0;
+    padding-left: 0;
+    height: 40%;
+}
+
+.marker-list h4 {
+    font-size: 18px;
+}
+
+.marker-list ul {
+    overflow: auto;
+    list-style: none;
+    margin-top: 10px;
+    padding: 0;
+    height: 75%;
+}
+
+.marker-list li {
+    margin-bottom: 10px;
+    border-bottom: 2px solid rgb(31, 79, 111);
+    margin-left: 5%;
+}
+
+.map-container {
+    position: relative;
+    padding-bottom: 80%;
+    height: 50%;
+}
+
+.map-container #map-canvas {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ *  infoWindow
+ */
+
+.infoWindow {
+    max-width: 200px;
+}
+
+.infoWindow h3 {
+    text-align: center;
+    margin-top: 1%;
+    margin-bottom: 6%;
+    font-size: 18px;
+}
+
+.infoWindow p {
+    float: left;
+    max-width: 50%;
+}
+
+.infoWindow img {
+    float: right;
+    max-width: 50%;
+}
