@@ -25,4 +25,5 @@ Jeremy POUILLOT
 Front-End Web Learner ;)
 
 [GitHub](https://github.com/Dieedi)
+
 [linkedin](fr.linkedin.com/pub/jeremy-pouillot/9/901/293/en)
