@@ -24,5 +24,5 @@ map.js is used to diplay elements and flickr.js is the call for pictures
 Jeremy POUILLOT
 Front-End Web Learner ;)
 
-https://github.com/Dieedi
+[GitHub](https://github.com/Dieedi)
 [linkedin](fr.linkedin.com/pub/jeremy-pouillot/9/901/293/en)
