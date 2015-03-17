@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Neighborhood Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Loading Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- loading styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- loading jquery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" async></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js" async></script>
+
+    <!-- jquery part for autocomplete-->
+    <!-- <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script> -->
+
+    <!-- Loading knockoutjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+
+    <!-- Loading Google Map -->
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDREVIZuNleXILHf47t3Iw2fwiKUVDEvdo">
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row header">
+            <div class="col-xs-12 form-group">
+                <label for="searchMarkers">Search a place: </label>
+                <!-- Search Box with jquery ui autocomplete & knockoutjs filter implementation
+                     Thanks @ Tyrsius on stackoverflow for his answer on the post : http://stackoverflow.com/questions/12014128/using-knockout-to-filter-viewmodel-data-using-multiple-fields-columns-and-contro
+                     His jsfiddle which bring solution : http://jsfiddle.net/tyrsius/67kgm/
+                     Simplified version for my usage : http://jsfiddle.net/7d8nexk5/
+                      -->
+                <input type="text" class="form-control" id="searchMarkers" data-bind="value: nameSearch, valueUpdate: 'keyup'">
+            </div>
+        </div>
+        <div class="row content">
+            <div class="col-sm-3 marker-list">
+                <!-- VIEW / Using knockout to display markers list -->
+                <h4>Places</h4>
+                <ul data-bind="foreach: filteredRecords">
+                    <li data-bind="text: name, click: $parent.centerMap, value: $index, uniqueName: true"></li>
+                </ul>
+            </div>
+            <div class="col-sm-9 map-container">
+                <!-- Display map -->
+                <div id="map-canvas" data-bind="html: map"></div>
+            </div>
+        </div>
+       <!--  <article></article> -->
+    </div>
+
+    <!-- build:js js/main.js -->
+    <!-- map/view script -->
+    <script src="js/flickr.js"></script>
+    <!-- <script src="js/geoLoc.js"></script> -->
+    <script src="js/map.js"></script>
+    <!-- /build -->
+</body>
+</html>
